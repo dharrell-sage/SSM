@@ -1,8 +1,8 @@
 #!/bin/bash
 
-USERS=$(aws ssm get-parameters --names lsm.user.list | awk {'print $4'} | tr "," "\n")
+userlist=$(aws ssm get-parameters --names lsm.user.list | awk {'print $4'} | tr "," "\n")
 
-for u_p in $USERS
+for i in $userlist
 do
-  echo $u_p | sed -e 's/;/ * /' -e 's/$/ */'
+  aws ssm get-parameters --names "$i" --with-decryption | awk {'print $4,$5,$6,$7'} >> test.txt
 done
